@@ -44,7 +44,11 @@ class Entry:
         if self.rect.collidepoint(mouse_position):
             if mouse_buttons[0]:
                 self.active = True
-
+        elif not self.rect.collidepoint(mouse_position):
+            if mouse_buttons[0]:
+                self.active = False
+                if self.add_cursor:
+                    self.input = self.input.rstrip(self.cursor)
         if self.active:
             self.handle_input_events()
 

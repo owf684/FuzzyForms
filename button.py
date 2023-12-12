@@ -10,8 +10,9 @@ class Button:
         self.h = h
         self.rect = pygame.Rect(x, y, w, h)
         self.back_rect = pygame.Rect(x - 2, y - 2, w + 4, h + 4)
-        self.unselected_color = (120, 120, 120)
-        self.selected_color = (100, 100, 100)
+        self.unselected_color = (40, 40, 40)
+        self.hover_color = (70, 70, 70)
+        self.selected_color = (80, 80, 80)
         self.text = text
         self.font_size = 12
         self.font = pygame.font.Font(None, self.font_size)
@@ -24,6 +25,7 @@ class Button:
         self.linked_function = None
         self.function_triggered = False
         self.button_pressed = False
+        self.hover = False
 
     def update(self, screen):
         self.detect_input()
@@ -35,7 +37,10 @@ class Button:
         mouse_buttons = pygame.mouse.get_pressed()
         if self.rect.collidepoint(mouse_position) and mouse_buttons[0]:
             self.button_pressed = True
+        elif self.rect.collidepoint(mouse_position):
+            self.hover = True
         else:
+            self.hover = False
             self.button_pressed = False
 
     def trigger_function(self):
@@ -50,10 +55,11 @@ class Button:
 
         if self.button_pressed:
             color = self.selected_color
+        elif self.hover:
+            color = self.hover_color
         else:
             color = self.unselected_color
 
-        pygame.draw.rect(screen, (40, 40, 40), self.back_rect)
         pygame.draw.rect(screen, color, self.rect)
         screen.blit(self.text_image, self.text_rect)
 

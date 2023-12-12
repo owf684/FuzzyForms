@@ -2,6 +2,8 @@ import pygame
 from button import Button
 from label import Label
 from entry import Entry
+from combo_box import ComboBox
+
 
 class Form:
     def __init__(self, x, y, w, h):
@@ -14,7 +16,7 @@ class Form:
         self.back_rect = pygame.Rect(x - 4, y - 4, w + 8, h + 8)
         self.render = False
         self.color = (60, 60, 60)
-        self.back_color = (150, 150, 150)
+        self.back_color = (40, 40, 40)
         self.buttons = {}
         self.labels = {}
         self.combo_boxes = {}
@@ -32,6 +34,9 @@ class Form:
 
         for key, entry in self.entries.items():
             entry.update(screen, events)
+
+        for key, combo_box in self.combo_boxes.items():
+            combo_box.update(screen)
 
     def add_button(self, button_name, text, x, y, w, h):
         button_x = x + self.x
@@ -62,4 +67,8 @@ class Form:
         self.labels[label_name].rect = pygame.Rect(label_x, label_y, 0, 0)
 
     def add_entry(self, entry_name, x, y, w, h, font_size):
-        self.entries[entry_name] = Entry(x, y, w, h, font_size)
+        self.entries[entry_name] = Entry(x+self.x, y+self.y, w, h, font_size)
+
+    def add_combo_box(self, combo_box_name, x, y, w, h):
+
+        self.combo_boxes[combo_box_name] = ComboBox(x+self.x, y+self.y, w, h)
