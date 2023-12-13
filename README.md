@@ -2,7 +2,7 @@ Fuzzy Forms is a pygame based framework wriiten for pygame! It enables rapid dev
 
 Read the Wiki for tutorials and API documentation.
 
-To use simply download the source files, place them in your project directory and import form.
+To use simply download the source files, place them in your project directory, and import form.
 
 
  Enjoy!
