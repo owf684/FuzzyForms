@@ -17,7 +17,7 @@ DIRECTORY = 4
 
 class ComboBox:
 
-    def __init__(self,x, y, width, height):
+    def __init__(self, x, y, width, height):
         self.entries = list()
         self.show_entries = False
         self.font = pygame.font.Font(None, 18)
@@ -43,6 +43,8 @@ class ComboBox:
         self.scroll_entry = None
         self.scroll_entry_copied = False
         self.left_click_latch = False
+        self.scroll_up_buffer = list()
+        self.scroll_down_buffer = list()
 
     def reset(self):
         self.entries.clear()
@@ -60,13 +62,16 @@ class ComboBox:
             elif self.show_entries:
                 y_position = self.position.y
 
+                i = 0
                 for entry in self.entries:
                     pygame.draw.rect(screen, entry[COLOR], entry[RECT])
                     pygame.draw.rect(screen, (30, 30, 30), entry[RECT], 2)
                     screen.blit(entry[ENTRY_IMAGE],
                                 (self.position.x + 5, y_position + self.entries[self.selected_index][RECT].height / 4))
                     y_position += self.height
-
+                    i += 1
+                    if i == 10:
+                        break
     def set_position(self, position_vector):
         self.position = position_vector
         self.sensing_rect = pygame.Rect(position_vector.x, position_vector.y, self.width, self.height)
@@ -137,7 +142,7 @@ class ComboBox:
         if len(self.scroll_value) < 3:
             self.scroll_value_copied = False
 
-    def update(self, screen):
+    def update(self, screen, events):
 
         mouse_position = pygame.mouse.get_pos()
         mouse_button = pygame.mouse.get_pressed()
@@ -197,5 +202,25 @@ class ComboBox:
                         self.scroll_timer_started = False
 
                     entry[COLOR] = self.entry_unselected_color
-
+        if self.show_entries:
+            self.scroll_entries(events)
         self.draw_combo_box(screen)
+
+    def scroll_entries(self, events):
+        if events['MouseWheel'] is not None:
+            if events['MouseWheel'].y == 1:
+                if len(self.entries) > 10:
+
+                    for entry in self.entries:
+                        entry[RECT].y -= self.height
+                    self.scroll_down_buffer.append(self.entries[0])
+                    self.entries = self.entries[1:]
+
+            if events['MouseWheel'].y == -1:
+                if len(self.scroll_down_buffer) > 0:
+
+                    self.entries.insert(0,self.scroll_down_buffer.pop())
+                    for entry in self.entries:
+                        entry[RECT].y += self.height
+
+

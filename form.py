@@ -36,20 +36,11 @@ class Form:
             entry.update(screen, events)
 
         for key, combo_box in self.combo_boxes.items():
-            combo_box.update(screen)
+            combo_box.update(screen, events)
 
     def add_button(self, button_name, text, x, y, w, h):
-        button_x = x + self.x
-        button_y = y + self.y
-        if button_x + w > self.x + self.w \
-                or x < 0:
-            button_x = self.x
-
-        if button_y + h > self.y + self.h \
-                or y < 0:
-            button_y = self.y
-
-        self.buttons[button_name] = Button(text, button_x, button_y, w, h)
+        x_position, y_position = self.check_boundaries(x, y, w, h)
+        self.buttons[button_name] = Button(text, x_position, y_position, w, h)
 
     def add_label(self, label_name, text, x, y, font_size):
 
@@ -67,8 +58,27 @@ class Form:
         self.labels[label_name].rect = pygame.Rect(label_x, label_y, 0, 0)
 
     def add_entry(self, entry_name, x, y, w, h, font_size):
-        self.entries[entry_name] = Entry(x+self.x, y+self.y, w, h, font_size)
+        x_position, y_position = self.check_boundaries(x, y, w, h)
+        self.entries[entry_name] = Entry(x_position, y_position, w, h, font_size)
 
     def add_combo_box(self, combo_box_name, x, y, w, h):
+        x_position, y_position = self.check_boundaries(x, y, w, h)
+        self.combo_boxes[combo_box_name] = ComboBox(x_position, y_position, w, h)
 
-        self.combo_boxes[combo_box_name] = ComboBox(x+self.x, y+self.y, w, h)
+    def check_boundaries(self, x, y, w, h):
+
+        x_position = x + self.x
+
+        if x_position + w > self.x + self.w:
+            x_position = self.x + self.w - w
+        elif x < 0:
+            x_position = 0
+
+        y_position = y + self.y
+
+        if y_position + h > self.y + self.h:
+            y_position = self.y + self.h - h
+        if y < 0:
+            y_position = 0
+
+        return x_position, y_position

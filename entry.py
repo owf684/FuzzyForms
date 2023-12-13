@@ -13,6 +13,8 @@ class Entry:
 
         self.rect = pygame.Rect(x, y, w, h)
         self.color = (125, 125, 125)
+        self.selected_color = (80, 80, 80)
+        self.active_color = self.color
         self.back_color = (50, 50, 50)
         self.back_rect = pygame.Rect(x - 2, y - 2, w + 4, h + 4)
         self.active = False
@@ -44,9 +46,11 @@ class Entry:
         if self.rect.collidepoint(mouse_position):
             if mouse_buttons[0]:
                 self.active = True
+                self.active_color = self.selected_color
         elif not self.rect.collidepoint(mouse_position):
             if mouse_buttons[0]:
                 self.active = False
+                self.active_color = self.color
                 if self.add_cursor:
                     self.input = self.input.rstrip(self.cursor)
         if self.active:
@@ -78,7 +82,7 @@ class Entry:
 
     def draw(self, screen):
         pygame.draw.rect(screen, self.back_color, self.back_rect)
-        pygame.draw.rect(screen, self.color, self.rect)
+        pygame.draw.rect(screen, self.active_color, self.rect)
         text_image = self.font.render(self.input, 1, self.font_color)
         input_copy = copy.deepcopy(self.input)
         while text_image.get_width() > self.w:
