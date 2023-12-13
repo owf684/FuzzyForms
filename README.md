@@ -1,4 +1,4 @@
-Fuzzy Forms is a pygame based framework wriiten for pygame! It enables rapid development of GUI windows. 
+Fuzzy Forms is a pygame based framework wriiten for pygame! It enables rapid development of GUIs in pygame. 
 
 Read the Wiki for tutorials and API documentation.
 
