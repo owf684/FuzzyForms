@@ -45,7 +45,7 @@ class ComboBox:
         self.left_click_latch = False
         self.scroll_up_buffer = list()
         self.scroll_down_buffer = list()
-
+        self.scroll_offset_y = 0
     def reset(self):
         self.entries.clear()
         self.y_gap = 0
@@ -91,7 +91,7 @@ class ComboBox:
             view_input = view_input[:len(view_input) - 1]
             entry_image = self.font.render(view_input, 1, self.font_color)
 
-        rect = pygame.Rect(self.position.x, self.position.y + self.y_gap, self.width, self.height)
+        rect = pygame.Rect(self.position.x, self.position.y + self.y_gap + self.scroll_offset_y, self.width, self.height)
         self.y_gap += self.height
         self.entries.append([entry_image, rect, input_text, self.entry_unselected_color, directory])
 
@@ -213,6 +213,9 @@ class ComboBox:
 
                     for entry in self.entries:
                         entry[RECT].y -= self.height
+
+                    self.scroll_offset_y -= self.height
+
                     self.scroll_down_buffer.append(self.entries[0])
                     self.entries = self.entries[1:]
 
@@ -222,5 +225,6 @@ class ComboBox:
                     self.entries.insert(0,self.scroll_down_buffer.pop())
                     for entry in self.entries:
                         entry[RECT].y += self.height
+                    self.scroll_offset_y += self.height
 
 
