@@ -19,6 +19,7 @@ new_form.add_label('l1', 'Hello, World', 220, 200, 20)
 new_form.add_entry('e2', 20, 50, 100, 25, 18)
 new_form.add_button('b2', 'add entry', 150, 50, 100, 25)
 new_form.add_combo_box('cb1', 275, 50, 100, 25)
+new_form.add_switch('s1','sprite sheet',100,300,100,25)
 
 new_form.render = True
 i = 0

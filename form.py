@@ -3,7 +3,7 @@ from button import Button
 from label import Label
 from entry import Entry
 from combo_box import ComboBox
-
+from switch import Switch
 
 class Form:
     def __init__(self, x, y, w, h):
@@ -13,7 +13,7 @@ class Form:
         self.w = w
         self.h = h
         self.rect = pygame.Rect(x, y, w, h)
-        self.back_rect = pygame.Rect(x - 4, y - 4, w + 8, h + 8)
+        self.back_rect = pygame.Rect(x - 1, y - 1, w + 2, h + 2)
         self.render = False
         self.color = (60, 60, 60)
         self.back_color = (40, 40, 40)
@@ -21,7 +21,7 @@ class Form:
         self.labels = {}
         self.combo_boxes = {}
         self.entries = {}
-
+        self.switches = {}
     def update(self, screen, events):
         pygame.draw.rect(screen, self.back_color, self.back_rect)
         pygame.draw.rect(screen, self.color, self.rect)
@@ -38,9 +38,16 @@ class Form:
         for key, combo_box in self.combo_boxes.items():
             combo_box.update(screen, events)
 
+        for key, switch in self.switches.items():
+            switch.update(screen)
+
     def add_button(self, button_name, text, x, y, w, h):
         x_position, y_position = self.check_boundaries(x, y, w, h)
         self.buttons[button_name] = Button(text, x_position, y_position, w, h)
+
+    def add_switch(self, switch_name, text, x, y, w, h):
+        x_position, y_position = self.check_boundaries(x, y, w, h)
+        self.switches[switch_name] = Switch(text, x_position, y_position, w, h)
 
     def add_label(self, label_name, text, x, y, font_size):
 
@@ -64,6 +71,7 @@ class Form:
     def add_combo_box(self, combo_box_name, x, y, w, h):
         x_position, y_position = self.check_boundaries(x, y, w, h)
         self.combo_boxes[combo_box_name] = ComboBox(x_position, y_position, w, h)
+
 
     def check_boundaries(self, x, y, w, h):
 
