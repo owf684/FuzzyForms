@@ -1,9 +1,9 @@
 import pygame
-from button import Button
-from label import Label
-from entry import Entry
-from combo_box import ComboBox
-from switch import Switch
+from form.button import Button
+from form.label import Label
+from form.entry import Entry
+from form.combo_box import ComboBox
+from form.switch import Switch
 
 class Form:
     def __init__(self, x, y, w, h):
