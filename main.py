@@ -11,7 +11,6 @@ new_form = Form(100,
                 100,
                 400,
                 400)
-
 new_form.add_entry('e1', 20, 200, 100, 25, 18)
 new_form.add_button('b1', '->', 150, 200, 50, 25)
 new_form.add_label('l1', 'Hello, World', 220, 200, 20)
