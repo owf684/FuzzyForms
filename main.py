@@ -11,37 +11,34 @@ new_form = Form(100,
                 100,
                 400,
                 400)
-new_form.add_entry('e1', 20, 200, 100, 25, 18)
-new_form.add_button('b1', '->', 150, 200, 50, 25)
-new_form.add_label('l1', 'Hello, World', 220, 200, 20)
 
-new_form.add_entry('e2', 20, 50, 100, 25, 18)
-new_form.add_button('b2', 'add entry', 150, 50, 100, 25)
-new_form.add_combo_box('cb1', 275, 50, 100, 25)
-new_form.add_switch('s1','sprite sheet',100,300,100,25)
+y_pos = 0
+y_increment = 30
+
+combo_dict =  {
+    'cb1' : 'none',
+    'cb2' : 'none',
+    'cb3' : 'none',
+    'cb4' : 'none'
+}
+for key, value in combo_dict.items():
+    new_form.add_combo_box(key,20,y_pos,200,20)
+    y_pos += y_increment
+    for i in range(10):
+        new_form.combo_boxes[key].add_entry(str(i))
+
 
 new_form.render = True
-i = 0
-while i <= 20:
-    new_form.combo_boxes['cb1'].add_entry(str(i))
-    i+=1
+
 events = {'TextInput': None,
           'KeyDown': None,
           'MouseWheel': None}
 
 
-def test():
-    inputs = new_form.entries['e1'].get_text()
-    new_form.labels['l1'].set_text(inputs)
-
-
-def add_entry():
-    new_form.combo_boxes['cb1'].add_entry(new_form.entries['e2'].get_text())
 
 
 screen = pygame.display.set_mode((screen_width, screen_height))
-new_form.buttons['b1'].connect(test)
-new_form.buttons['b2'].connect(add_entry)
+
 while running:
 
     # clear screen
