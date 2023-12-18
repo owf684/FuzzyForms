@@ -30,9 +30,14 @@ class ComboBox:
         self.entry_unselected_color = (100, 100, 100)
         self.y_gap = 0
         self.selected_index = 0
+        self.last_selected_index = 0
+
         self.width = width
         self.height = height
         self.render = True
+
+        self.linked_function = None
+        self.trigger_on_change = False
 
         self.scroll_value = None
         self.is_scrolling = False
@@ -46,6 +51,7 @@ class ComboBox:
         self.scroll_up_buffer = list()
         self.scroll_down_buffer = list()
         self.scroll_offset_y = 0
+
     def reset(self):
         self.entries.clear()
         self.y_gap = 0
@@ -75,6 +81,13 @@ class ComboBox:
 
                     if i == 10:
                         return True
+
+    def on_change(self):
+        if self.trigger_on_change:
+            if self.linked_function is not None:
+                if self.selected_index != self.last_selected_index:
+                    self.last_selected_index = self.selected_index
+                    self.linked_function()
     def set_position(self, position_vector):
         self.position = position_vector
         self.sensing_rect = pygame.Rect(position_vector.x, position_vector.y, self.width, self.height)
@@ -94,7 +107,8 @@ class ComboBox:
             view_input = view_input[:len(view_input) - 1]
             entry_image = self.font.render(view_input, 1, self.font_color)
 
-        rect = pygame.Rect(self.position.x, self.position.y + self.y_gap + self.scroll_offset_y, self.width, self.height)
+        rect = pygame.Rect(self.position.x, self.position.y + self.y_gap + self.scroll_offset_y, self.width,
+                           self.height)
         self.y_gap += self.height
         self.entries.append([entry_image, rect, input_text, self.entry_unselected_color, directory])
 
@@ -162,7 +176,8 @@ class ComboBox:
             try:
                 self.entries[self.selected_index][COLOR] = self.entry_selected_color
 
-                if mouse_button[0] and not self.left_click_latch and not self.show_entries and not self.other_active(combo_boxes):
+                if mouse_button[0] and not self.left_click_latch and not self.show_entries and not self.other_active(
+                        combo_boxes):
                     self.show_entries = True
                     self.left_click_latch = True
                 elif not mouse_button[0] and self.left_click_latch:
@@ -215,6 +230,7 @@ class ComboBox:
         if self.show_entries:
             self.scroll_entries(events)
         self.draw_combo_box(screen)
+        self.on_change()
 
     def scroll_entries(self, events):
         if events['MouseWheel'] is not None:
@@ -232,9 +248,11 @@ class ComboBox:
             if events['MouseWheel'].y == -1:
                 if len(self.scroll_down_buffer) > 0:
 
-                    self.entries.insert(0,self.scroll_down_buffer.pop())
+                    self.entries.insert(0, self.scroll_down_buffer.pop())
                     for entry in self.entries:
                         entry[RECT].y += self.height
                     self.scroll_offset_y += self.height
 
-
+    def connect(self, function,trigger_on_change):
+        self.linked_function = function
+        self.trigger_on_change = trigger_on_change

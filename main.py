@@ -12,21 +12,17 @@ new_form = Form(100,
                 400,
                 400)
 
-y_pos = 0
-y_increment = 30
+new_form.add_combo_box('cb1', 50, 50, 100, 50)
+new_form.combo_boxes['cb1'].add_entry("Hello, World 1")
+new_form.combo_boxes['cb1'].add_entry("Hello, World 2")
+new_form.combo_boxes['cb1'].add_entry("Hello, world 3")
 
-combo_dict =  {
-    'cb1' : 'none',
-    'cb2' : 'none',
-    'cb3' : 'none',
-    'cb4' : 'none'
-}
-for key, value in combo_dict.items():
-    new_form.add_combo_box(key,20,y_pos,200,20)
-    y_pos += y_increment
-    for i in range(10):
-        new_form.combo_boxes[key].add_entry(str(i))
 
+def on_change():
+    print('combo box has changed')
+
+
+new_form.combo_boxes['cb1'].connect(on_change, True)
 
 new_form.render = True
 
@@ -34,15 +30,12 @@ events = {'TextInput': None,
           'KeyDown': None,
           'MouseWheel': None}
 
-
-
-
 screen = pygame.display.set_mode((screen_width, screen_height))
 
 while running:
 
     # clear screen
-    screen.fill((0,0,0))
+    screen.fill((0, 0, 0))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -58,9 +51,9 @@ while running:
         new_form.update(screen, events)
 
         # clear events dictionary
-    events = {  'TextInput': None,
-                'KeyDown': None,
-                'MouseWheel': None}
+    events = {'TextInput': None,
+              'KeyDown': None,
+              'MouseWheel': None}
     pygame.display.flip()
 
     clock.tick(120) / 1000
