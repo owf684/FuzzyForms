@@ -5,6 +5,7 @@ from form.entry import Entry
 from form.combo_box import ComboBox
 from form.switch import Switch
 
+
 class Form:
     def __init__(self, x, y, w, h):
 
@@ -20,26 +21,30 @@ class Form:
         self.buttons = {}
         self.labels = {}
         self.combo_boxes = {}
+        self.sorted_combo_boxes = list()
+
         self.entries = {}
         self.switches = {}
+
     def update(self, screen, events):
         pygame.draw.rect(screen, self.back_color, self.back_rect)
         pygame.draw.rect(screen, self.color, self.rect)
 
-        for key, button in self.buttons.items():
-            button.update(screen)
+        for key, l_button in self.buttons.items():
+            l_button.update(screen)
 
-        for key, label in self.labels.items():
-            label.update(screen)
+        for key, l_label in self.labels.items():
+            l_label.update(screen)
 
-        for key, entry in self.entries.items():
-            entry.update(screen, events)
+        for key, l_entry in self.entries.items():
+            l_entry.update(screen, events)
 
-        for key, combo_box in self.combo_boxes.items():
-            combo_box.update(screen, events)
+        for l_combo_box in self.sorted_combo_boxes:
 
-        for key, switch in self.switches.items():
-            switch.update(screen)
+            l_combo_box.update(screen, events, self.combo_boxes)
+
+        for key, l_switch in self.switches.items():
+            l_switch.update(screen)
 
     def add_button(self, button_name, text, x, y, w, h):
         x_position, y_position = self.check_boundaries(x, y, w, h)
@@ -71,7 +76,22 @@ class Form:
     def add_combo_box(self, combo_box_name, x, y, w, h):
         x_position, y_position = self.check_boundaries(x, y, w, h)
         self.combo_boxes[combo_box_name] = ComboBox(x_position, y_position, w, h)
+        self.sorted_combo_boxes.append(self.combo_boxes[combo_box_name])
+        self.sort_combo_boxes()
 
+    def sort_combo_boxes(self):
+        i = 0
+        j = 0
+        while i < len(self.sorted_combo_boxes):
+            key = self.sorted_combo_boxes[i]
+            j = i + 1
+            while j < len(self.sorted_combo_boxes):
+                if self.sorted_combo_boxes[i].position.y < self.sorted_combo_boxes[j].position.y:
+                    self.sorted_combo_boxes[i] = self.sorted_combo_boxes[j]
+                    self.sorted_combo_boxes[j] = key
+                j += 1
+
+            i += 1
 
     def check_boundaries(self, x, y, w, h):
 

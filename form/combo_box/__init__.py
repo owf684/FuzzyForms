@@ -59,6 +59,8 @@ class ComboBox:
                 pygame.draw.rect(screen, (30, 30, 30), self.entries[0][RECT], 2)
                 screen.blit(self.entries[self.selected_index][ENTRY_IMAGE],
                             (self.position.x + 5, self.position.y + self.entries[self.selected_index][RECT].height / 4))
+                return False
+
             elif self.show_entries:
                 y_position = self.position.y
 
@@ -70,8 +72,9 @@ class ComboBox:
                                 (self.position.x + 5, y_position + self.entries[self.selected_index][RECT].height / 4))
                     y_position += self.height
                     i += 1
+
                     if i == 10:
-                        break
+                        return True
     def set_position(self, position_vector):
         self.position = position_vector
         self.sensing_rect = pygame.Rect(position_vector.x, position_vector.y, self.width, self.height)
@@ -142,7 +145,15 @@ class ComboBox:
         if len(self.scroll_value) < 3:
             self.scroll_value_copied = False
 
-    def update(self, screen, events):
+    def other_active(self, combo_boxes):
+        for key, combo_box in combo_boxes.items():
+            if combo_box != self:
+                if combo_box.show_entries:
+                    return True
+
+        return False
+
+    def update(self, screen, events, combo_boxes):
 
         mouse_position = pygame.mouse.get_pos()
         mouse_button = pygame.mouse.get_pressed()
@@ -151,10 +162,9 @@ class ComboBox:
             try:
                 self.entries[self.selected_index][COLOR] = self.entry_selected_color
 
-                if mouse_button[0] and not self.left_click_latch and not self.show_entries:
+                if mouse_button[0] and not self.left_click_latch and not self.show_entries and not self.other_active(combo_boxes):
                     self.show_entries = True
                     self.left_click_latch = True
-
                 elif not mouse_button[0] and self.left_click_latch:
                     self.left_click_latch = False
 
