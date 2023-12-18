@@ -18,6 +18,7 @@ DIRECTORY = 4
 class ComboBox:
 
     def __init__(self, combo_box_name, x, y, width, height):
+        self.index_offset = 0
         self.entries = list()
         self.show_entries = False
         self.font = pygame.font.Font(None, 18)
@@ -32,7 +33,7 @@ class ComboBox:
         self.entry_unselected_color = (100, 100, 100)
         self.y_gap = 0
         self.selected_index = 0
-        self.last_selected_index = 0
+        self.last_selected_index = -1
 
         self.width = width
         self.height = height
@@ -54,10 +55,18 @@ class ComboBox:
         self.scroll_down_buffer = list()
         self.scroll_offset_y = 0
 
+    # resets combo box
     def reset(self):
         self.entries.clear()
         self.y_gap = 0
         self.selected_index = 0
+        self.index_offset = -1
+        self.last_selected_index = 0
+
+    # returns the true index of the combo box
+    def get_index(self):
+
+        return self.selected_index + self.index_offset
 
     def draw_combo_box(self, screen):
         if len(self.entries) > 0:
@@ -243,15 +252,17 @@ class ComboBox:
 
                     self.scroll_down_buffer.append(self.entries[0])
                     self.entries = self.entries[1:]
-
+                    self.index_offset += 1
             if events['MouseWheel'].y == -1:
                 if len(self.scroll_down_buffer) > 0:
 
                     self.entries.insert(0, self.scroll_down_buffer.pop())
+                    self.index_offset -= 1
+
                     for entry in self.entries:
                         entry[RECT].y += self.height
                     self.scroll_offset_y += self.height
 
-    def connect(self, function,trigger_on_change):
+    def connect(self, function, trigger_on_change):
         self.linked_function = function
         self.trigger_on_change = trigger_on_change

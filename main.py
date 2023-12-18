@@ -13,9 +13,9 @@ new_form = Form(100,
                 400)
 
 new_form.add_combo_box('cb1', 50, 50, 100, 50)
-new_form.combo_boxes['cb1'].add_entry("Hello, World 1")
-new_form.combo_boxes['cb1'].add_entry("Hello, World 2")
-new_form.combo_boxes['cb1'].add_entry("Hello, world 3")
+for i in range(20):
+    new_form.combo_boxes['cb1'].add_entry(str(i))
+
 
 new_form.add_combo_box('cb2', 50, 100, 100, 50)
 new_form.combo_boxes['cb2'].add_entry("Hello, World 1")
@@ -24,7 +24,7 @@ new_form.combo_boxes['cb2'].add_entry("Hello, world 3")
 
 def on_change(**kwargs):
     name = kwargs['name']
-    print(name)
+    print(new_form.combo_boxes[name].selected_index, new_form.combo_boxes[name].index_offset)
 
 
 new_form.combo_boxes['cb1'].connect(on_change, True)
