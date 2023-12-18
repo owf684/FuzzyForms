@@ -9,6 +9,7 @@ from form.switch import Switch
 class Form:
     def __init__(self, x, y, w, h):
 
+        self.changed_combo_box_name = None
         self.x = x
         self.y = y
         self.w = w
@@ -42,7 +43,7 @@ class Form:
         for l_combo_box in self.sorted_combo_boxes:
 
             l_combo_box.update(screen, events, self.combo_boxes)
-
+            
         for key, l_switch in self.switches.items():
             l_switch.update(screen)
 
@@ -75,7 +76,7 @@ class Form:
 
     def add_combo_box(self, combo_box_name, x, y, w, h):
         x_position, y_position = self.check_boundaries(x, y, w, h)
-        self.combo_boxes[combo_box_name] = ComboBox(x_position, y_position, w, h)
+        self.combo_boxes[combo_box_name] = ComboBox(combo_box_name,x_position, y_position, w, h)
         self.sorted_combo_boxes.append(self.combo_boxes[combo_box_name])
         self.sort_combo_boxes()
 
