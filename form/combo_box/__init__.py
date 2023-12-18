@@ -61,7 +61,9 @@ class ComboBox:
         self.y_gap = 0
         self.selected_index = 0
         self.index_offset = -1
-        self.last_selected_index = 0
+        self.last_selected_index = -1
+        self.add_entry('None')
+
 
     # returns the true index of the combo box
     def get_index(self):
