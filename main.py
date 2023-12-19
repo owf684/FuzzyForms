@@ -17,10 +17,12 @@ for i in range(20):
     new_form.combo_boxes['cb1'].add_entry(str(i))
 
 
-new_form.add_combo_box('cb2', 50, 100, 100, 50)
-new_form.combo_boxes['cb2'].add_entry("Hello, World 1")
-new_form.combo_boxes['cb2'].add_entry("Hello, World 2")
-new_form.combo_boxes['cb2'].add_entry("Hello, world 3")
+new_form.add_button('b1', 'refresh',50,150,100,50)
+
+def refresh():
+    new_form.combo_boxes['cb1'].reset()
+    for i in range(20):
+        new_form.combo_boxes['cb1'].add_entry(str(i))
 
 def on_change(**kwargs):
     name = kwargs['name']
@@ -28,8 +30,7 @@ def on_change(**kwargs):
 
 
 new_form.combo_boxes['cb1'].connect(on_change, True)
-new_form.combo_boxes['cb2'].connect(on_change, True)
-
+new_form.buttons['b1'].connect(refresh)
 new_form.render = True
 
 events = {'TextInput': None,

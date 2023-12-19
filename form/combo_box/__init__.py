@@ -60,12 +60,15 @@ class ComboBox:
     # resets combo box
     def reset(self):
         self.entries.clear()
+        self.scroll_down_buffer.clear()
         self.y_gap = 0
         self.selected_index = 0
-        self.index_offset = -1
+        self.index_offset = 0
         self.last_selected_index = -1
-        self.add_entry('None')
         self.scroll_offset_y = 0
+
+        self.add_entry('None')
+
 
     # returns the true index of the combo box
     def get_index(self):
