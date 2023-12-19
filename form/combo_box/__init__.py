@@ -65,7 +65,7 @@ class ComboBox:
         self.index_offset = -1
         self.last_selected_index = -1
         self.add_entry('None')
-        self.sensing_rect = pygame.Rect(self.x,self.y,self.width,self.height)
+        self.scroll_offset_y = 0
 
     # returns the true index of the combo box
     def get_index(self):
