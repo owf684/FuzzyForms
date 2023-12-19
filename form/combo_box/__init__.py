@@ -35,6 +35,8 @@ class ComboBox:
         self.selected_index = 0
         self.last_selected_index = -1
 
+        self.x = x
+        self.y = y
         self.width = width
         self.height = height
         self.render = True
@@ -63,7 +65,7 @@ class ComboBox:
         self.index_offset = -1
         self.last_selected_index = -1
         self.add_entry('None')
-
+        self.sensing_rect = pygame.Rect(self.x,self.y,self.width,self.height)
 
     # returns the true index of the combo box
     def get_index(self):
@@ -99,8 +101,14 @@ class ComboBox:
             if self.linked_function is not None:
                 if self.selected_index != self.last_selected_index:
                     self.last_selected_index = self.selected_index
-                    self.linked_function(name=self.name)
-                    return True
+                    try:
+
+                        self.linked_function(name=self.name)
+                        return True
+                    except Exception as e:
+                        print("linked_function error. \n"
+                              "make sure linked function uses format func(**kwargs) or func(name=None)",
+                              e)
         return False
 
     def set_position(self, position_vector):
